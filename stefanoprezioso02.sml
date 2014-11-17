@@ -16,7 +16,6 @@ fun strTokHelper(L, del) = if null(L) then nil
     else if null(#2(listChopper(L, del)))
     then [implode(#1(listChopper(L, del)))]
     else implode(#1(listChopper(L, del))) :: strTokHelper(#2(listChopper(L, del)), del);
-        
 
 (* FUNCTION NAME: stringTokenizer *)
 (* DESCRIPTION: takes a string and a delimiter and tokenizes the string *)
@@ -116,18 +115,19 @@ fun modeL(L) = getMode(occr(L, nil), nil);
 (* Problem 5 *)
 (* FUNCTION NAME: inseachhelper2 *)
 (* DESCRIPTION: inseach helper function. create the list with element at location i *)
-fun inseachhelper2(n, L, 0) = n :: L
-    |   inseachhelper2(n, x :: xs, i: int) = x :: inseachhelper2(n, xs, i - 1);
+fun inseachhelper2(n, nil, _) = n :: nil
+|   inseachhelper2(n, L, 0) = n :: L
+|   inseachhelper2(n, x :: xs, i: int) = x :: inseachhelper2(n, xs, i - 1);
 
 (* FUNCTION NAME: inseachhelper *)
 (* DESCRIPTION: inseach helper function. create the list of lists *)   
 fun inseachhelper(n, L, c, nil) = [inseachhelper2(n, L, c)]
-    |   inseachhelper(n, L, c, x :: xs) = inseachhelper2(n, L, c) :: inseachhelper(n, L, c + 1, xs);
+|   inseachhelper(n, L, c, x :: xs) = inseachhelper2(n, L, c) :: inseachhelper(n, L, c + 1, xs);
     
 (* FUNCTION NAME: inseach *)
 (* DESCRIPTION: insert an element into each position of a list *)
 fun inseach(n, nil) = [[n]]
-    |   inseach(n, L) = inseachhelper(n, L, 0, L);
+|   inseach(n, L) = inseachhelper(n, L, 0, L);
 
 (* FUNCTION NAME: permuHelper *)
 (* DESCRIPTION: *)
@@ -138,7 +138,6 @@ fun permuHelper(n:int, nil) = nil
 (* DESCRIPTION: generate permutation of identity list from 1 to n*)
 fun permu(1) = [[1]]
 |   permu(n:int) = permuHelper(n, permu(n - 1));
-
 
 (* Problem 6 *)
 (* FUNCTION NAME: getMin *)
@@ -184,7 +183,4 @@ fun plistHelper(n:int, c:int, L) = if c < 2 then L
 (* FUNCTION NAME: plist *)
 (* DESCRIPTION: returns list all prime numbers up to n*)
 fun plist(n:int) = plistHelper(n, n, nil);
-
-
-    
     
