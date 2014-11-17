@@ -112,7 +112,74 @@ fun getMode(nil, nil) = nil
 (* DESCRIPTION: takes a list and returns the mode with number of occurences *)
 fun modeL(L) = getMode(occr(L, nil), nil);
 
+(* Problem 5 *)
+(* FUNCTION NAME: interleave *)
+(* DESCRIPTION: *)
+fun interleave(x:int, nil) = [[x]]
+|   interleave(x:int, l::nil:int list) = (x :: [l]) :: [l :: hd(interleave(x,nil))]
+|   interleave(x:int, l::ls) = (x :: l :: ls) :: (l :: hd(interleave(x, ls))) :: interleave(x, ls) ;
 
+(* NOT DONE *)
+interleave(4, [1,2,3]);
+
+(* FUNCTION NAME: permuHelper *)
+(* DESCRIPTION: *)
+
+
+(* FUNCTION NAME: permu *)
+(* DESCRIPTION: generate permutation of identity list from 1 to n*)
+
+
+
+(* Problem 6 *)
+(* FUNCTION NAME: getMin *)
+(* DESCRIPTION: returns minimum value from list with remaining list*)
+fun getMin(nil) = (0, nil)
+|   getMin(x::nil) = (x, nil)
+|   getMin(x::xs) = if x <= #1(getMin(xs)) then (x, xs) 
+        else (#1(getMin(xs)), x :: (#2(getMin(xs))));
+
+
+(* FUNCTION NAME: sshelper *)
+(* DESCRIPTION: sorts list using selection sort*)
+fun sshelper(nil, nil) = (nil, nil)
+|   sshelper(nil, y::nil) = ([y], nil)
+|   sshelper(nil, L) = sshelper([#1(getMin(L))], #2(getMin(L)))
+|   sshelper(x::nil, nil) = ([x], nil)
+|   sshelper(x::nil, y::nil) = if x <= y then (x :: [y], nil) else (y :: [x], nil)
+|   sshelper(x::nil, L) = sshelper(x :: [#1(getMin(L))], #2(getMin(L)))
+|   sshelper(X, nil) = (X, nil)
+|   sshelper(X, y::nil) = (X @ [y], nil)
+|   sshelper(X, L) = sshelper(X @ [#1(getMin(L))], #2(getMin(L)));
+
+(* FUNCTION NAME: ssort *)
+(* DESCRIPTION: returns sorted list using selection sort*)
+fun ssort(L:int list) = #1(sshelper(nil, L));
+
+ssort([3,2,6,9,1,4,0,8,5,7]);
+
+
+(* SEVEN IS WORKING BUT NEEDS HIGHER ORDER FUNCTION!*)
+(* Problem 7 *)
+(* FUNCTION NAME: isPrimeHelper *)
+(* DESCRIPTION: determines whether a number is prime or not*)
+fun isPrimeHelper(n:int, c:int) = if n = c then true 
+    else if n mod c = 0 then false
+    else isPrimeHelper(n, c + 1);
+
+(* FUNCTION NAME: isPrime *)
+(* DESCRIPTION: returns whether a number is prime or not*)
+fun isPrime(n:int) = isPrimeHelper(n, 2);
+
+(* FUNCTION NAME: plistHelper *)
+(* DESCRIPTION: creates list of all prime numbers up to n*)
+fun plistHelper(n:int, c:int, L) = if c < 2 then L
+    else if isPrime(c) then plistHelper(n, c - 1, c :: L)
+    else plistHelper(n, c - 1, L);
+
+(* FUNCTION NAME: plist *)
+(* DESCRIPTION: returns list all prime numbers up to n*)
+fun plist(n:int) = plistHelper(n, n, nil);
 
 
     
