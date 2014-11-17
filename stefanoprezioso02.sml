@@ -81,13 +81,14 @@ fun pTriangles(row:int) = if row = 1 then [[1]]
 
 (* Problem 4 *)
 (* FUNCTION NAME: searchAndAdd *)
-(* DESCRIPTION: increments corresponding tuple in list*)
+(* DESCRIPTION: finds and increments corresponding tuple in list*)
 fun searchAndAdd(x, nil) = [(x, 1)]
 |   searchAndAdd(x, (a,b:int)::ls) = if x = a then (a, b + 1) :: ls
         else (a,b) :: searchAndAdd(x, ls);
 
 (* FUNCTION NAME: occr *)
-(* DESCRIPTION: takes a list and returns values with number of occurences *)
+(* DESCRIPTION: takes a list and returns tuple list of 
+                values with number of occurences *)
 fun occr(nil, L) = L
 |   occr(x::nil, L) = searchAndAdd(x, L)
 |   occr(x::xs, L) = occr(xs, searchAndAdd(x, L));
@@ -113,22 +114,30 @@ fun getMode(nil, nil) = nil
 fun modeL(L) = getMode(occr(L, nil), nil);
 
 (* Problem 5 *)
-(* FUNCTION NAME: interleave *)
-(* DESCRIPTION: *)
-fun interleave(x:int, nil) = [[x]]
-|   interleave(x:int, l::nil:int list) = (x :: [l]) :: [l :: hd(interleave(x,nil))]
-|   interleave(x:int, l::ls) = (x :: l :: ls) :: (l :: hd(interleave(x, ls))) :: interleave(x, ls) ;
+(* FUNCTION NAME: inseachhelper2 *)
+(* DESCRIPTION: inseach helper function. create the list with element at location i *)
+fun inseachhelper2(n, L, 0) = n :: L
+    |   inseachhelper2(n, x :: xs, i: int) = x :: inseachhelper2(n, xs, i - 1);
 
-(* NOT DONE *)
-interleave(4, [1,2,3]);
+(* FUNCTION NAME: inseachhelper *)
+(* DESCRIPTION: inseach helper function. create the list of lists *)   
+fun inseachhelper(n, L, c, nil) = [inseachhelper2(n, L, c)]
+    |   inseachhelper(n, L, c, x :: xs) = inseachhelper2(n, L, c) :: inseachhelper(n, L, c + 1, xs);
+    
+(* FUNCTION NAME: inseach *)
+(* DESCRIPTION: insert an element into each position of a list *)
+fun inseach(n, nil) = [[n]]
+    |   inseach(n, L) = inseachhelper(n, L, 0, L);
 
 (* FUNCTION NAME: permuHelper *)
 (* DESCRIPTION: *)
-
+fun permuHelper(n:int, nil) = nil
+|   permuHelper(n:int, l::ls) = inseach(n, l) @ permuHelper(n, ls);
 
 (* FUNCTION NAME: permu *)
 (* DESCRIPTION: generate permutation of identity list from 1 to n*)
-
+fun permu(1) = [[1]]
+|   permu(n:int) = permuHelper(n, permu(n - 1));
 
 
 (* Problem 6 *)
@@ -138,7 +147,6 @@ fun getMin(nil) = (0, nil)
 |   getMin(x::nil) = (x, nil)
 |   getMin(x::xs) = if x <= #1(getMin(xs)) then (x, xs) 
         else (#1(getMin(xs)), x :: (#2(getMin(xs))));
-
 
 (* FUNCTION NAME: sshelper *)
 (* DESCRIPTION: sorts list using selection sort*)
@@ -156,10 +164,6 @@ fun sshelper(nil, nil) = (nil, nil)
 (* DESCRIPTION: returns sorted list using selection sort*)
 fun ssort(L:int list) = #1(sshelper(nil, L));
 
-ssort([3,2,6,9,1,4,0,8,5,7]);
-
-
-(* SEVEN IS WORKING BUT NEEDS HIGHER ORDER FUNCTION!*)
 (* Problem 7 *)
 (* FUNCTION NAME: isPrimeHelper *)
 (* DESCRIPTION: determines whether a number is prime or not*)
