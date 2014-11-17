@@ -80,9 +80,37 @@ fun pTriangles(row:int) = if row = 1 then [[1]]
     else pTriangleHelper(row, 1);
 
 (* Problem 4 *)
+(* FUNCTION NAME: searchAndAdd *)
+(* DESCRIPTION: increments corresponding tuple in list*)
+fun searchAndAdd(x, nil) = [(x, 1)]
+|   searchAndAdd(x, (a,b:int)::ls) = if x = a then (a, b + 1) :: ls
+        else (a,b) :: searchAndAdd(x, ls);
 
+(* FUNCTION NAME: occr *)
+(* DESCRIPTION: takes a list and returns values with number of occurences *)
+fun occr(nil, L) = L
+|   occr(x::nil, L) = searchAndAdd(x, L)
+|   occr(x::xs, L) = occr(xs, searchAndAdd(x, L));
 
+(* FUNCTION NAME: getMode *)
+(* DESCRIPTION: returns a list of mode tuples*)
+fun getMode(nil, nil) = nil
+|   getMode(nil, L) = L
+|   getMode((x,y)::nil, (l,m)::nil) = if y > m then [(x,y)]
+        else if y = m then (x,y)::[(l,m)] else [(l,m)]
+|   getMode((x,y)::nil, (l,m)::ls) = if y > m then [(x,y)]
+        else if y = m then (x,y)::(l,m)::ls else (l,m)::ls
+|   getMode((x,y)::xs, (l,m)::nil) = if y > m then getMode(xs, [(x,y)])
+        else if y = m then getMode(xs, (x,y)::[(l,m)]) 
+        else getMode(xs, [(l,m)])
+|   getMode((x,y)::xs, (l,m)::ls) = if y > m then getMode(xs, [(x,y)])
+        else if y = m then getMode(xs, (x,y)::(l,m)::ls) 
+        else getMode(xs, (l,m)::ls)
+|   getMode(x::xs, nil) = getMode(xs, [x]);
 
+(* FUNCTION NAME: modeL *)
+(* DESCRIPTION: takes a list and returns the mode with number of occurences *)
+fun modeL(L) = getMode(occr(L, nil), nil);
 
 
 
